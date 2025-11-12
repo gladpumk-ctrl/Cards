@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>يدك</title>
+<style>
+button {margin:5px;padding:10px;font-size:16px;}
+</style>
+</head>
+<body>
+<h2>اختر بطاقة من يدك</h2>
+<div id="buttons"></div>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+const telegram = window.Telegram.WebApp;
+
+// Cards sent dynamically via query params ?cards=...
+// Example: cards=بطاقة1|بطاقة2|بطاقة3|بطاقة4|بطاقة5
+const params = new URLSearchParams(window.location.search);
+const cards = params.get("cards").split("|");
+
+const container = document.getElementById("buttons");
+cards.forEach(card => {
+    const btn = document.createElement("button");
+    btn.textContent = card;
+    btn.onclick = () => {
+        // Send the selected card back to the bot as a /card command
+        telegram.sendData(`/card ${card}`);
+        btn.disabled = true; // Prevent double clicks
+    };
+    container.appendChild(btn);
+});
+</script>
+</body>
+</html>
